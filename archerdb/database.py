@@ -3,14 +3,16 @@ This module contains the Database class.
 
 It is used to create new databases, and add or drop tables.
 """
-
+import datetime
 import json
 import os
+import threading
 from .table import Table
 from .utils import log_transaction
 from .constants import initialize_constants, \
     get_db_path, \
-    get_db_dir
+    get_db_dir, \
+    get_log_file_path
 
 
 class Database():
@@ -24,6 +26,7 @@ class Database():
 
         :param db_directory: directory to store db data and logs.
         """
+        self.name = 'db'
         initialize_constants(db_directory)
         if not os.path.exists(get_db_dir()):
             os.makedirs(get_db_dir())
@@ -34,14 +37,39 @@ class Database():
         self.data_filepath = '{}/{}'.format(
             get_db_dir(), get_db_path())
         self.log_filepath = '{}/{}'.format(
-            get_db_dir(), get_db_path())
+            get_db_dir(), get_log_file_path())
         self._load_db()
+
+        # self._periodically_save()
+
+    def _periodically_save(self):
+        threading.Timer(3600, self._periodically_save).start()
+        self._save_to_disk()
 
     def _load_db(self):
         if os.path.exists(self.data_filepath):
             data = json.load(open(self.data_filepath))
             for key in data.keys():
                 self.db[key] = Table(key, data[key])
+        if os.path.exists(self.log_filepath):
+
+            time_str = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+            archived_log = '{}/log/{}.txt'.format(get_db_dir(), time_str)
+            os.rename(self.log_filepath, '{}/log/{}.txt'.format(get_db_dir(), time_str))
+
+            with open(archived_log) as f:
+                for index, line in enumerate(f):
+                    self._replay(json.loads(line))
+
+    def _replay(self, transaction):
+        if transaction['class_name'] == Database.__name__:
+            method = getattr(self, transaction['method'])
+            method(transaction['params'][0])
+
+        elif transaction['class_name'] == Table.__name__:
+            table = self.add_table(transaction['object_name'])
+            method = getattr(table, transaction['method'])
+            method(transaction['params'][0])
 
     def _save_to_disk(self):
         with open(self.data_filepath, 'w') as outfile:
