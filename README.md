@@ -1,4 +1,4 @@
-<img src="https://github.com/mattdillon/ArcherDB/blob/main/images/logo.svg" alt="logo" width="200px">
+<img src="https://github.com/axle-pi/archerdb/blob/main/images/logo.svg" alt="logo" width="200px">
 
 - [Documentation](#documentation)
 - [Quick start](#quickStart)
