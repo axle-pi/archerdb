@@ -1,6 +1,6 @@
 import unittest
 import os
-from ArcherDB import Database
+from archerdb import Database
 
 TEST_DB_DIR = 'testdb'
 

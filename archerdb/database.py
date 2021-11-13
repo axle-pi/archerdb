@@ -27,7 +27,7 @@ class Database():
         :param db_directory: directory to store db data and logs.
         """
         self.name = 'db'
-        initialize_constants(db_directory)
+        initialize_constants(db_directory, True)
         if not os.path.exists(get_db_dir()):
             os.makedirs(get_db_dir())
         if not os.path.exists('{}/db'.format(get_db_dir())):

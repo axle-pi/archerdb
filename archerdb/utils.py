@@ -1,7 +1,7 @@
 """Define utility methods shared by different files."""
 import json
 
-from .constants import get_log_file_path, get_db_dir
+from .constants import get_log_file_path, get_db_dir, get_log_enabled
 from functools import wraps
 
 
@@ -14,6 +14,10 @@ def log_transaction(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
+
+        if not get_log_enabled():
+            return func(*args, **kwargs)
+
         args = list(args)
 
         log_item = {'class_name': args[0].__class__.__name__,

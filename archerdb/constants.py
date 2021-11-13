@@ -1,7 +1,7 @@
 """Initialize and get global variables."""
 
 
-def initialize_constants(db_directory):
+def initialize_constants(db_directory, log_enabled):
     """Set global variables.
 
     Parameters:
@@ -13,6 +13,8 @@ def initialize_constants(db_directory):
     LOG_FILEPATH = 'log/log.txt'
     global DB_DIRECTORY
     DB_DIRECTORY = db_directory
+    global LOG_ENABLED
+    LOG_ENABLED = log_enabled
 
 
 def get_log_file_path():
@@ -40,3 +42,12 @@ def get_db_dir():
     :return: db directory
     """
     return DB_DIRECTORY
+
+
+def get_log_enabled():
+    """
+    Get log enabled.
+
+    :return: is log enabled
+    """
+    return LOG_ENABLED
