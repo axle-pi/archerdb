@@ -29,12 +29,12 @@ class Table():
             return self.records[id]
         except KeyError:
             print("Key not found: {} in table {}".format(id, self.name))
-            return None
+            return False
 
     @log_transaction
-    def add(self, data):
+    def put(self, data):
         """
-        Add new record to table.
+        Put new record in table.
 
         :param data: record data
         :return: record id
@@ -45,7 +45,7 @@ class Table():
             return newId
         except Exception as e:
             print("Error adding record to db: " + str(e))
-            return None
+            return False
 
     @log_transaction
     def delete(self, id):
@@ -60,6 +60,7 @@ class Table():
             return id
         except KeyError:
             print("Key not found: {}".format(id))
+            return False
 
     def search(self, params, return_doc=False):
         """

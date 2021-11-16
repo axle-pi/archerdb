@@ -10,15 +10,15 @@ import threading
 from .table import Table
 from .utils import log_transaction
 from .constants import initialize_constants, \
-    get_db_path, \
     get_db_dir, \
+    get_data_file_path, \
     get_log_file_path
 
 
 class Database():
     """Class to create db, and create or drop tables."""
 
-    db = {}
+    _db = {}
 
     def __init__(self, db_directory):
         """
@@ -34,23 +34,18 @@ class Database():
             os.makedirs('{}/db'.format(get_db_dir()))
         if not os.path.exists('{}/log'.format(get_db_dir())):
             os.makedirs('{}/log'.format(get_db_dir()))
-        self.data_filepath = '{}/{}'.format(
-            get_db_dir(), get_db_path())
-        self.log_filepath = '{}/{}'.format(
-            get_db_dir(), get_log_file_path())
+
+        self.data_filepath = get_data_file_path()
+        self.log_filepath = get_log_file_path()
         self._load_db()
 
         # self._periodically_save()
-
-    def _periodically_save(self):
-        threading.Timer(3600, self._periodically_save).start()
-        self._save_to_disk()
 
     def _load_db(self):
         if os.path.exists(self.data_filepath):
             data = json.load(open(self.data_filepath))
             for key in data.keys():
-                self.db[key] = Table(key, data[key])
+                self._db[key] = Table(key, data[key])
         if os.path.exists(self.log_filepath):
 
             time_str = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
@@ -71,9 +66,13 @@ class Database():
             method = getattr(table, transaction['method'])
             method(transaction['params'][0])
 
+    def _periodically_save(self):
+        threading.Timer(3600, self._periodically_save).start()
+        self._save_to_disk()
+
     def _save_to_disk(self):
         with open(self.data_filepath, 'w') as outfile:
-            res = {k: v.records for (k, v) in self.db.items()}
+            res = {k: v.records for (k, v) in self._db.items()}
             json.dump(res, outfile)
         if os.path.exists(self.log_filepath):
             os.remove(self.log_filepath)
@@ -86,12 +85,12 @@ class Database():
         :param table_name: name of table
         :return: new :class:`Table`, or existing :class:`Table` matching table_name
         """
-        if table_name in self.db:
+        if table_name in self._db:
             print('{} already exists'.format(table_name))
-            return self.db[table_name]
+            return self._db[table_name]
         else:
             table = Table(table_name, {})
-            self.db[table_name] = table
+            self._db[table_name] = table
             return table
 
     @log_transaction
@@ -103,8 +102,8 @@ class Database():
         :return: True if drop successful, False otherwise.
 
         """
-        if table_name in self.db:
-            del self.db[table_name]
+        if table_name in self._db:
+            del self._db[table_name]
             return True
         else:
             print('{} does not exist'.format(table_name))
@@ -117,7 +116,7 @@ class Database():
         :return: List of tables in db.
 
         """
-        return list(self.db.keys())
+        return list(self._db.keys())
 
 
 if __name__ == '__main__':

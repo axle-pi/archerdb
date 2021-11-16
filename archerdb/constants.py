@@ -7,14 +7,15 @@ def initialize_constants(db_directory, log_enabled):
     Parameters:
     db_directory (string): Path to directory to save db data and logs
     """
-    global DATABASE_FILEPATH
-    DATABASE_FILEPATH = 'db/data.json'
-    global LOG_FILEPATH
-    LOG_FILEPATH = 'log/log.txt'
     global DB_DIRECTORY
     DB_DIRECTORY = db_directory
     global LOG_ENABLED
     LOG_ENABLED = log_enabled
+
+    global DATA_FILEPATH
+    DATA_FILEPATH = '{}/db/data.json'.format(DB_DIRECTORY)
+    global LOG_FILEPATH
+    LOG_FILEPATH = '{}/log/log.txt'.format(DB_DIRECTORY)
 
 
 def get_log_file_path():
@@ -26,13 +27,13 @@ def get_log_file_path():
     return LOG_FILEPATH
 
 
-def get_db_path():
+def get_data_file_path():
     """
     Get db path.
 
     :return: db path
     """
-    return DATABASE_FILEPATH
+    return DATA_FILEPATH
 
 
 def get_db_dir():

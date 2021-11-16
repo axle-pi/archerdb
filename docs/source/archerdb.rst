@@ -1,4 +1,4 @@
-ArcherDB package
+archerdb package
 ================
 
 Submodules
@@ -12,7 +12,7 @@ archerdb.constants module
    :undoc-members:
    :show-inheritance:
 
-ArcherDB.database module
+archerdb.database module
 ------------------------
 
 .. automodule:: archerdb.database

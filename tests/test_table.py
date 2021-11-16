@@ -22,24 +22,24 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(table.records, {})
         self.assertEqual(table.index, {})
 
-    def test_add_record(self):
+    def test_put_record(self):
         table = Table('test', {})
-        rec_id = table.add(TEST_RECORD)
+        rec_id = table.put(TEST_RECORD)
         record = table.get(rec_id)
         self.assertEqual(record, TEST_RECORD)
 
     def test_delete_record(self):
         table = Table('test', {})
-        rec_id = table.add(TEST_RECORD)
+        rec_id = table.put(TEST_RECORD)
         table.delete(rec_id)
-        record = table.get(id)
-        self.assertEqual(record, None)
+        record = table.get(rec_id)
+        self.assertEqual(record, False)
 
     def test_search_record(self):
         table = Table('test', {})
-        rec_id = table.add(TEST_RECORD)
-        rec_id2 = table.add(TEST_RECORD_2)
-        rec_id3 = table.add(TEST_RECORD_3)
+        rec_id = table.put(TEST_RECORD)
+        rec_id2 = table.put(TEST_RECORD_2)
+        rec_id3 = table.put(TEST_RECORD_3)
 
         res = table.search({'type': 'admin'})
         self.assertEqual(res, [rec_id])
