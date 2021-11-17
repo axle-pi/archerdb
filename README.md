@@ -1,4 +1,9 @@
-<img src="https://github.com/axle-pi/archerdb/blob/main/images/logo.svg" alt="logo" width="200px">
+<img align="right" src="https://raw.githubusercontent.com/axle-pi/archerdb/main/docs/_static/logo_only.svg" alt="logo" width="70px"> 
+
+
+# ArcherDB
+
+
 
 - [Documentation](#documentation)
 - [Quick start](#quickStart)
@@ -22,9 +27,9 @@ See latest [docs](https://archerdb.readthedocs.io/en/latest/)
 >>> users = db.add_table('users')
 
 # Add document to users table
->>> id_1 = users.add({'username' : 'axle', 'type':'admin', 'email': 'axle@archerdb.com'})
->>> id_2 = users.add({'username' : 'sparks', 'type':'admin', 'email': 'sparks@archerdb.com'})
->>> id_3 = users.add({'username' : 'support', 'type':'support', 'email': 'email@archerdb.com'})
+>>> id_1 = users.put({'username' : 'axle', 'type':'admin', 'email': 'axle@archerdb.com'})
+>>> id_2 = users.put({'username' : 'sparks', 'type':'admin', 'email': 'sparks@archerdb.com'})
+>>> id_3 = users.put({'username' : 'support', 'type':'support', 'email': 'email@archerdb.com'})
 
 # get user by id
 >>> user = users.get(id_1)
@@ -42,3 +47,12 @@ See latest [docs](https://archerdb.readthedocs.io/en/latest/)
 <a id="install"></a>
 
 # Install
+
+ArcherDB is available on PyPI
+
+[View on PyPI](https://pypi.org/project/archerdb/)
+
+```
+$ pip install archerdb
+```
+
